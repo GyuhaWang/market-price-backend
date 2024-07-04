@@ -4,3 +4,5 @@
 
 도큐먼트: 하나 하나의 정보
 컬랙션: 도큐먼트들의 묶음
+
+findById, findByIdAndUpdate, findByIdAndDelete
