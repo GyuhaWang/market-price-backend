@@ -6,13 +6,13 @@ const {
 	getProductById,
 	updateProductById,
 	deleteProduct,
+	getAveragePrice,
 } = require('../controllers/productController');
 
 router.route('/').get(getAllProducts).post(createProduct);
 router
 	.route('/:id')
-	.get(getProductById)
 	.put(updateProductById)
 	.delete(deleteProduct);
-
+router.route('/average').get(getAveragePrice);
 module.exports = router;

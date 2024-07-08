@@ -4,8 +4,16 @@ const Product = require('../models/productModel');
 //Get/Products
 
 const getAllProducts = asyncHandler(async (req, res) => {
-	const product = await Product.find();
-	res.send(product);
+	const { region, category } = req.query;
+	const query = {};
+	if (region) {
+		query['region'] = region;
+	}
+	if (category) {
+		query['category'] = category;
+	}
+	const product = await Product.find(query).sort({ _id: -1 });
+	res.json(product);
 });
 
 //Create Product
@@ -26,10 +34,27 @@ const createProduct = asyncHandler(async (req, res) => {
 	res.send('Create Product');
 });
 
-const getProductById = asyncHandler(async (req, res) => {
-	const product = await Product.findById(req.params.id);
-	res.send(Product);
+const getAveragePrice = asyncHandler(async (req, res) => {
+	const { region, category } = req.query;
+	const query = {};
+	if (region) {
+		query['region'] = region;
+	}
+	if (category) {
+		query['category'] = category;
+	}
+	const result = await Product.aggregate([
+		{ $match: query },
+		{ $group: { _id: "$region", averagePrice: { $avg: '$price' } } },
+	]);
+
+	if (result.length === 0) {
+		return res.json({ averagePrice: 0 });
+	}
+
+	res.json({ averagePrice: result[0].averagePrice });
 });
+// desperated
 
 const updateProductById = asyncHandler(async (req, res) => {
 	const { region, category, name, price, description, imageURL } = req.body;
@@ -63,7 +88,8 @@ const deleteProduct = asyncHandler(async (req, res) => {
 module.exports = {
 	getAllProducts,
 	createProduct,
-	getProductById,
+	
 	updateProductById,
 	deleteProduct,
+	getAveragePrice,
 };

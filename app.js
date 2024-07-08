@@ -2,6 +2,8 @@ const express = require('express');
 const dbConnect = require('./config/dbconnect');
 
 const app = express();
+var cors = require('cors');
+app.use(cors());
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
