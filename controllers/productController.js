@@ -45,7 +45,7 @@ const getAveragePrice = asyncHandler(async (req, res) => {
 	}
 	const result = await Product.aggregate([
 		{ $match: query },
-		{ $group: { _id: "$region", averagePrice: { $avg: '$price' } } },
+		{ $group: { _id: '$region', averagePrice: { $avg: '$price' } } },
 	]);
 
 	if (result.length === 0) {
@@ -56,25 +56,18 @@ const getAveragePrice = asyncHandler(async (req, res) => {
 });
 // desperated
 
-const updateProductById = asyncHandler(async (req, res) => {
-	const { region, category, name, price, description, imageURL } = req.body;
-	if (!region || !name || !category || !price || !description) {
-		return res.send('필수 값이 입력되지 않았습니다.');
-	}
+const updateProductLikeById = asyncHandler(async (req, res) => {
 	const product = await Product.findById(req.params.id);
 	if (!product) {
 		throw new Error('Product not found');
 	}
-	product.name = name;
-	product.region = region;
-	product.category = category;
-	product.name = name;
-	product.price = price;
-	product.description = description;
-	product.imageURL = imageURL;
-
-	Product.save();
-	res.send(Product);
+	await Product.updateOne(
+		{ _id: req.params.id },
+		{ $set: { like: product.like + 1 } }
+	);
+	// product.like = product.like + 1;
+	// Product.save();
+	res.send('updated');
 });
 
 const deleteProduct = asyncHandler(async (req, res) => {
@@ -88,8 +81,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 module.exports = {
 	getAllProducts,
 	createProduct,
-	
-	updateProductById,
+	updateProductLikeById,
 	deleteProduct,
 	getAveragePrice,
 };
