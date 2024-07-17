@@ -25,6 +25,11 @@ const productSchema = new mongoose.Schema(
 		imageURL: {
 			type: String,
 		},
+		like: {
+			type: Number,
+			default: 0,
+			required: true,
+		},
 	},
 	{
 		timeStamps: true,
