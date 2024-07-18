@@ -1,4 +1,8 @@
 <h1>market price backend</h1>
+<p align="center">
+<img width="45%" alt="image" src="https://github.com/user-attachments/assets/adaf38a6-daa0-433c-9478-db1df3e9c689">
+<img width="45%" alt="image" src="https://github.com/user-attachments/assets/fd363a31-0d1a-4314-bc33-6b378bff3763">
+<p/>
 <br>
 <a href="https://market-price-ochre.vercel.app/">웹사이트</a>
 <br>
