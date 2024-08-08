@@ -4,7 +4,7 @@ const Product = require('../models/productModel');
 //Get/Products
 
 const getAllProducts = asyncHandler(async (req, res) => {
-	const { region, category } = req.query;
+	const { region, category, search } = req.query;
 	const query = {};
 	if (region) {
 		query['region'] = region;
@@ -12,6 +12,10 @@ const getAllProducts = asyncHandler(async (req, res) => {
 	if (category) {
 		query['category'] = category;
 	}
+	if (search) {
+		query['name'] = { $regex: search, $options: 'i' };
+	}
+	console.log(query);
 	const product = await Product.find(query).sort({ _id: -1 });
 	res.json(product);
 });
@@ -35,7 +39,7 @@ const createProduct = asyncHandler(async (req, res) => {
 });
 
 const getAveragePrice = asyncHandler(async (req, res) => {
-	const { region, category } = req.query;
+	const { region, category, search } = req.query;
 	const query = {};
 	if (region) {
 		query['region'] = region;
@@ -43,6 +47,10 @@ const getAveragePrice = asyncHandler(async (req, res) => {
 	if (category) {
 		query['category'] = category;
 	}
+	if (search) {
+		query['name'] = { $regex: search, $options: 'i' };
+	}
+	console.log(query);
 	const result = await Product.aggregate([
 		{ $match: query },
 		{ $group: { _id: '$region', averagePrice: { $avg: '$price' } } },
